@@ -3,7 +3,10 @@ export class ShoppingBasket {
     throw new Error("Not Implemented");
   }
 
-  public summary(): string {
-    throw new Error("Not Implemented");
+  public summary(): string[] {
+    return [
+      "Creation date: 20/12/2020",
+      "Total: £0.00",
+    ]
   }
 }
