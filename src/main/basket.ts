@@ -12,18 +12,29 @@ const Products: { [description: string]: number } = {
 };
 
 export class ShoppingBasket {
-  private basketContents: BasketContent[];
+  private basketContents: Map<string, BasketContent>;
 
   constructor() {
-    this.basketContents = [];
+    this.basketContents = new Map<string, BasketContent>();
   }
 
   public addItem(description: string, quantity: number): void {
-    this.basketContents.push({
-      description,
-      quantity,
-      price: 1.0 * quantity * Products[description],
-    });
+    const price = 1.0 * quantity * Products[description];
+    let data = this.basketContents.get(description);
+    if (data) {
+      data.quantity += quantity;
+      data.price += price;
+      this.basketContents.set(description, data);
+    } else {
+      this.basketContents.set(
+        description, 
+        {
+          description,
+          quantity,
+          price,
+        }
+      );
+    }
   }
 
   private formatLineItem(basketContent: BasketContent) {
@@ -33,12 +44,12 @@ export class ShoppingBasket {
   }
 
   public summary(): string[] {
-    if (this.basketContents.length > 0) {
+    if (this.basketContents.size > 0) {
       let total = 0;
       let lines = ["Creation date: 20/12/2020"];
-      for (const content of this.basketContents) {
-        lines.push(this.formatLineItem(content));
-        total += content.price;
+      for (const [ _, value ] of this.basketContents.entries()) {
+        lines.push(this.formatLineItem(value));
+        total += value.price;
       }
       return [...lines, `Total: £${total.toFixed(2)}`];
     }
