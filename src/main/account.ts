@@ -1,23 +1,27 @@
+import {TransactionRepository} from "./transactionRepository";
+import {StatementPrinter} from "./statementPrinter";
+
 export interface Printer {
     printline(line: string): void
 }
 
 export class Account {
-    private printer: Printer;
-    constructor(printer: Printer) {
-        this.printer = printer;
+    private transactionRepository: TransactionRepository;
+    private statementPrinter: StatementPrinter;
+
+    constructor(transactionRepository: TransactionRepository, statementPrinter: StatementPrinter) {
+        this.transactionRepository = transactionRepository;
+        this.statementPrinter = statementPrinter;
     }
 
     deposit(amount: number): void {
-        throw new Error("Not implemented yet")
+        this.transactionRepository.addDeposit(amount)
     }
     withdraw(amount: number): void {
-        throw new Error("Not implemented yet")
+        this.transactionRepository.addWithdrawal(amount)
     }
     printStatement(): void {
-        throw new Error("Not implemented yet")
+        this.statementPrinter.print(this.transactionRepository.allTransactions())
     }
-
-
 
 }

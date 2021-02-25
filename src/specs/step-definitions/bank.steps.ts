@@ -1,6 +1,10 @@
 import {DataTable} from '@cucumber/cucumber'
 import {Account} from "../../main/account";
 import {defineFeature, loadFeature} from "jest-cucumber";
+import {TransactionRepository} from "../../main/transactionRepository";
+import {mock, MockProxy} from "jest-mock-extended";
+import {StatementPrinter} from "../../main/statementPrinter";
+import {Clock} from "../../main/clock";
 
 const feature = loadFeature('./src/specs/features/bank.feature')
 
@@ -11,7 +15,10 @@ defineFeature(feature, test => {
     }
     let account: Account
     beforeEach(() => {
-        account = new Account(printer)
+        const clock: MockProxy<Clock> = mock<Clock>()
+        const transactionRepository: TransactionRepository = new TransactionRepository(clock)
+        const statementPrinter: StatementPrinter = new StatementPrinter()
+        account = new Account(transactionRepository, statementPrinter)
     })
 
     test("Client prints statement", ({ given, and, when, then}) => {
