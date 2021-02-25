@@ -1,6 +1,14 @@
 interface BasketContent {
   quantity: number;
   description: string;
+  price: number;
+}
+
+const Products: { [description: string]: number} = {
+  ["Lord of the Rings"]: 10.00,
+  ["The Hobbit"]: 5.00,
+  ["Game of Thrones"]: 9.00,
+  ["Breaking Bad"]: 7.00
 }
 
 export class ShoppingBasket {
@@ -11,15 +19,21 @@ export class ShoppingBasket {
   }
 
   public addItem(description: string, quantity: number): void {
-    this.basketContents.push({ description, quantity });
+    this.basketContents.push({ description, quantity, price: 1.0 * quantity * Products[description] });
+  }
+
+  private formatLineItem(basketContent: BasketContent) {
+    const amountPerItem = Products[basketContent.description].toFixed(2);
+    const price = basketContent.price.toFixed(2);
+    return `${basketContent.quantity} x ${basketContent.description} // ${basketContent.quantity} x ${amountPerItem} = £${price}`;
   }
 
   public summary(): string[] {
     if (this.basketContents.length > 0)
       return [
         "Creation date: 20/12/2020",
-        "1 x The Hobbit // 1 x 5.00 = £5.00",
-        "Total: £5.00",
+        this.formatLineItem(this.basketContents[0]),
+        `Total: £${this.basketContents[0].price.toFixed(2)}`,
       ];
     return ["Creation date: 20/12/2020", "Total: £0.00"];
   }
