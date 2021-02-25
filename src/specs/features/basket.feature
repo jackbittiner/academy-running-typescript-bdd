@@ -12,9 +12,9 @@ Feature: Shopping Basket
         | Total: £45.00 |
 
   Scenario: Log items added to shopping cart on the console
-    Given A user creates a basket
-    And the user adds an item to the basket
+    Given Client creates a basket
+    And Client adds 5 units of "Breaking Bad" to my shopping basket
     Then I see a log entry for each action
       | logLine |
-      | [BASKET CREATED]: Created[<"YYYY-07-12">], User[] |
-      | [ITEM ADDED TO SHOPPING CART]: Added[<"YYYY-07-12">], User[], Product[], Quantity[], Price[<£12.00>] |
+      | [BASKET CREATED]: Date: "20/12/2020", User: "John Doe" |
+      | [ITEM ADDED TO SHOPPING CART]: Added: "20/12/2020", User: "John Doe", Product: "Breaking Bad", Quantity: 5, Price: 35|
