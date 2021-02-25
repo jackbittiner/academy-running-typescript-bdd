@@ -1,4 +1,4 @@
-// import {DataTable} from '@cucumber/cucumber'
+import { DataTable } from "@cucumber/cucumber";
 import { defineFeature, loadFeature } from "jest-cucumber";
 import { ShoppingBasket } from "../../main/basket";
 
@@ -14,7 +14,7 @@ defineFeature(feature, test => {
   });
 
   test("Add items to Shopping Basket", ({ given, and, when, then }) => {
-    let summary: string;
+    let summary: string[];
 
     given(
       /^Client adds (\d+) units of "(.*)" to my shopping basket$/,
@@ -35,7 +35,10 @@ defineFeature(feature, test => {
     });
 
     then("they should see:", table => {
-      expect(summary).toEqual("");
+      const expected = table.map((row: any) => {
+        return row.outputLines;
+      });
+      expect(summary).toEqual(expected);
     });
   });
 });

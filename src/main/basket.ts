@@ -4,12 +4,12 @@ interface BasketContent {
   price: number;
 }
 
-const Products: { [description: string]: number} = {
-  ["Lord of the Rings"]: 10.00,
-  ["The Hobbit"]: 5.00,
-  ["Game of Thrones"]: 9.00,
-  ["Breaking Bad"]: 7.00
-}
+const Products: { [description: string]: number } = {
+  ["Lord of the Rings"]: 10.0,
+  ["The Hobbit"]: 5.0,
+  ["Game of Thrones"]: 9.0,
+  ["Breaking Bad"]: 7.0,
+};
 
 export class ShoppingBasket {
   private basketContents: BasketContent[];
@@ -19,7 +19,11 @@ export class ShoppingBasket {
   }
 
   public addItem(description: string, quantity: number): void {
-    this.basketContents.push({ description, quantity, price: 1.0 * quantity * Products[description] });
+    this.basketContents.push({
+      description,
+      quantity,
+      price: 1.0 * quantity * Products[description],
+    });
   }
 
   private formatLineItem(basketContent: BasketContent) {
@@ -29,12 +33,15 @@ export class ShoppingBasket {
   }
 
   public summary(): string[] {
-    if (this.basketContents.length > 0)
-      return [
-        "Creation date: 20/12/2020",
-        this.formatLineItem(this.basketContents[0]),
-        `Total: £${this.basketContents[0].price.toFixed(2)}`,
-      ];
+    if (this.basketContents.length > 0) {
+      let total = 0;
+      let lines = ["Creation date: 20/12/2020"];
+      for (const content of this.basketContents) {
+        lines.push(this.formatLineItem(content));
+        total += content.price;
+      }
+      return [...lines, `Total: £${total.toFixed(2)}`];
+    }
     return ["Creation date: 20/12/2020", "Total: £0.00"];
   }
 }
